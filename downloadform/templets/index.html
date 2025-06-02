@@ -1,0 +1,201 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit PDF</title>
+    <!-- <link rel="stylesheet" href="{% static '/css/style.css' %}"> -->
+    <style>
+        * {
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: white;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        label {
+            /* text-transform: uppercase; */
+            font-size: 1rem;
+        }
+
+        main {
+            width: 57vw;
+            margin: 0 auto;
+            margin-top: 2rem;
+            /* background-color: #16223f; */
+            background-color: transparent;
+            color: black;
+            /* position: absolute;
+            top:50%;
+            left:50%;
+            transform: translate(-50%, -50%); */
+            padding: 2rem 1.8rem;
+            border-radius: 16px;
+        }
+
+        .group{
+            display: grid;
+            gap: 0.2rem;
+        }
+        
+        form { 
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        input,
+        button,
+        select {
+            border-radius: 6px;
+            border-width: 0;
+            height: 1.2rem;
+            color: black;
+            background-color: whitesmoke;
+            font-size: 1rem;
+            outline: 1px solid black;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem 1rem;
+            background-color: whitesmoke;
+        }
+
+        button {
+            height: 2.2rem;
+            width: 14%;
+            background-color: blueviolet;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            border-width: 0px;
+            outline: none;
+            cursor: pointer;
+            /* margin-top: 1.5rem; */
+        }
+
+        button:hover {
+            background-color: rgb(145, 64, 220);
+        }
+
+        select {
+            padding: 0 0.5rem;
+            height: 2.1rem;
+        }
+
+        a {
+            font-weight: 500;
+            font-size: 1.2rem;
+        }
+
+        a:hover {
+            color: rgb(171, 37, 37);
+            cursor: pointer;
+        }   
+
+        .select-parent{
+            width: 100%;
+        }
+        .select-parent > select{
+            
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>Download Certificate</h1>
+            <form id="formInput" action="" method="post">
+                {% csrf_token %}
+                <div class="group">
+                    <label for="select-input">Select Pdf</label>
+                    <div 
+                        class="select-parent" 
+                        onblur = "validation('select-input','select-error')"
+                        oninput = "validation('select-input','select-error')"
+                    >
+                        <select  name="selectInput" name="select input" id="select-input" onchange="selectPdf()">
+                            <option value="">Choose</option>
+                            <option value="1">Do It certain</option>
+                            <option value="2">certificate</option>
+                        </select>
+                    </div>
+                    <label id="select-error" hidden></label>
+                </div>
+
+                <div class="group">
+                    <label>Full Name</label>
+                    <input
+                        id="text-input"
+                        name="fullName"
+                        type="text"
+                        onblur = "validation('text-input','text-error')"
+                        oninput = "validation('text-input','text-error')"
+                    />
+                    <label id="text-error" hidden></label>
+                </div>
+
+                <div class="group">
+                    <label for="estimate-input">Estimate Number</label>
+                    <input type="number" name="numberInput" disabled value={{latest}} id="estimate-input">
+                </div>
+
+                <div class="group">
+                    <label for="date-input">Current Date</label>
+                    <input type="date" name="dateInput" id="date-input" disabled value="">
+                </div>
+
+                <div class="group">
+                    <label for="place-input">Place of Supply</label>
+                    <input type="text" name="placeInput" id="place-input" disabled value="07-Delhi">
+                </div>
+
+                <button id="edit-btn" disabled onmouseover="checkDetails()">Submit</button>
+                <a id="download-link" style="display:none;" download="downloaded.pdf">Download PDF</a>
+            </form>
+    </main>
+
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.js"></script>
+    <script src="{% static '/js/script.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#formInput").submit(function (event) {
+                event.preventDefault();
+                var formData = {
+                    select: $("#select-input").val(),
+                    text: $("#text-input").val(),
+                    estimate: $("#estimate-input").val(),
+                    date: $("#date-input").val(),
+                    place: $("#place-input").val(),
+                    csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+                };
+                // console.log(formData)
+                $.ajax({
+                    type: "POST",
+                    url: "readval/",
+                    data: formData,
+                    dataType: "json",
+                    success: function (response) {
+                        //   console.log(response);
+
+                    },
+                    error: function (xhr) {
+                        alert("Fill Proper fields")
+                    }
+                })
+            });
+        });
+    </script>
+</body>
+
+</html>
