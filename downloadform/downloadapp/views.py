@@ -21,7 +21,7 @@ def readval(request):
     # place = request.POST.get('place')
 
     if select == '1':
-        select = "Do it certain"
+        select = "Do it creation"
     elif select == "2":
         select = "certificate"
 
