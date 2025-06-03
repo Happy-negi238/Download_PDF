@@ -87,7 +87,7 @@ editBtn.addEventListener('click', async () => {
     // const centerX = (width - textWidth) / 2;
     const userTextY = height - 193;
     firstPage.drawText(userText, {
-        x: 51,
+        x: 37,
         y: userTextY,
         size: 10,
         font: segoeBd,
