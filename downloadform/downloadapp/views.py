@@ -9,8 +9,8 @@ from datetime import date
 today = date.today()
 # print(latest_record.id + 1)
 # latest_record = None
-latest_record = pdfData.objects.order_by('-id').first()
 def readval(request):
+    latest_record = pdfData.objects.order_by('-id').first()
     # print(latest_record)
     place = "07-Delhi"
     select = request.POST.get('select')
